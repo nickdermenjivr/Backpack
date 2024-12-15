@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace Core
 
         private void OnItemEvent(ItemAddedOrRemovedToBackpackEvent eventData)
         {
-            _ = PostData($"Item with ID:{eventData.Item.id}" + $" {eventData.Action}");
+            _ = PostData($"Item with ID:{eventData.ItemConfig.id}" + $" {eventData.Action}");
         }
         private async Task PostData(string data)
         {

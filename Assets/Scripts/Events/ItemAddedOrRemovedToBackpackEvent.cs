@@ -4,7 +4,7 @@ namespace Events
 {
     public class ItemAddedOrRemovedToBackpackEvent
     {
-        public ItemConfig Item { get; set; }
+        public ItemConfig ItemConfig { get; set; }
         public string Action { get; set; }
     }
 }

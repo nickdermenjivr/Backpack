@@ -5,13 +5,13 @@ namespace Core
 {
     public class InventoryManager : MonoBehaviour
     {
-        public List<ItemConfig> inventoryItems = new ();
-
+        private List<ItemConfig> _inventoryItems = new ();
+        
         public void AddItem(ItemConfig item)
         {
-            if (item != null && !inventoryItems.Contains(item))
+            if (item != null && !_inventoryItems.Contains(item))
             {
-                inventoryItems.Add(item);
+                _inventoryItems.Add(item);
                 Debug.Log($"Item {item.name} added to inventory.");
             }
             else
@@ -22,9 +22,9 @@ namespace Core
 
         public void RemoveItem(ItemConfig item)
         {
-            if (item != null && inventoryItems.Contains(item))
+            if (item != null && _inventoryItems.Contains(item))
             {
-                inventoryItems.Remove(item);
+                _inventoryItems.Remove(item);
                 Debug.Log($"Item {item.name} removed from inventory.");
             }
             else
@@ -35,7 +35,7 @@ namespace Core
 
         public List<ItemConfig> GetItems()
         {
-            return new List<ItemConfig>(inventoryItems);
+            return new List<ItemConfig>(_inventoryItems);
         }
     }
 }

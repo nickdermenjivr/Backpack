@@ -30,30 +30,37 @@ namespace Gameplay
             _inventoryManager = FindObjectOfType<InventoryManager>();
         }
 
-        public void AddToBackpack(ItemConfig item)
+        public void AddToBackpack(Item item)
         {
-            if (!_backpackSlots.ContainsKey(item.type))
-            {
-                Debug.LogError($"Slot for item type {item.type} not found!");
-                return;
-            }
-
-            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{Item = item, Action = "added"});
-            _inventoryManager.AddItem(item);
-            Debug.Log($"Item {item.name} added to backpack in slot {item.type}");
+            SetItemInSlot(item);
+            _inventoryManager.AddItem(item.itemConfig);
+            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{ItemConfig = item.itemConfig, Action = "added"});
+            Debug.Log($"Item {item.itemConfig.name} added to backpack in slot {item.itemConfig.type}");
         }
 
-        public void RemoveFromBackpack(ItemConfig item)
+        public void RemoveFromBackpack(Item item)
         {
-            if (!_backpackSlots.ContainsKey(item.type))
+            if (!_backpackSlots.ContainsKey(item.itemConfig.type))
             {
-                Debug.LogError($"Slot for item type {item.type} not found!");
+                Debug.LogError($"Slot for item type {item.itemConfig.type} not found!");
                 return;
             }
 
-            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{Item = item, Action = "removed"});
-            _inventoryManager.RemoveItem(item);
+            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{ItemConfig = item.itemConfig, Action = "removed"});
+            _inventoryManager.RemoveItem(item.itemConfig);
             Debug.Log($"Item {item.name} removed from backpack.");
+        }
+
+        public void SetItemInSlot(Item item)
+        {
+            if (!_backpackSlots.TryGetValue(item.itemConfig.type, out var slotTransform))
+            {
+                Debug.LogWarning($"No slot found for item type: {item.itemConfig.type}");
+                return;
+            }
+            
+            item.transform.SetParent(slotTransform);
+            item.transform.localPosition = Vector3.zero;
         }
     }
     
