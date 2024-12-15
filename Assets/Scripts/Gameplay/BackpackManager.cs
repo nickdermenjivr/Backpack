@@ -11,7 +11,6 @@ namespace Gameplay
     {
         [SerializeField] private List<ItemSlot> itemSlots;
         private Dictionary<ItemType, Transform> _backpackSlots;
-        private InventoryManager _inventoryManager;
 
         private void Awake()
         {
@@ -26,15 +25,13 @@ namespace Gameplay
             {
                 _backpackSlots[slot.itemType] = slot.slotTransform;
             }
-
-            _inventoryManager = FindObjectOfType<InventoryManager>();
         }
 
         public void AddToBackpack(Item item)
         {
             SetItemInSlot(item);
-            _inventoryManager.AddItem(item.itemConfig);
             EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{ItemConfig = item.itemConfig, Action = "added"});
+            
             Debug.Log($"Item {item.itemConfig.name} added to backpack in slot {item.itemConfig.type}");
         }
 
@@ -47,7 +44,7 @@ namespace Gameplay
             }
 
             EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{ItemConfig = item.itemConfig, Action = "removed"});
-            _inventoryManager.RemoveItem(item.itemConfig);
+            
             Debug.Log($"Item {item.name} removed from backpack.");
         }
 

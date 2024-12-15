@@ -1,13 +1,36 @@
 using System.Collections.Generic;
+using Events;
 using UnityEngine;
 
 namespace Core
 {
     public class InventoryManager : MonoBehaviour
     {
-        private List<ItemConfig> _inventoryItems = new ();
+        private readonly List<ItemConfig> _inventoryItems = new ();
+        private void Start()
+        {
+            EventManager.Subscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
+        }
+
+        private void OnDestroy()
+        {
+            EventManager.Unsubscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
+        }
         
-        public void AddItem(ItemConfig item)
+
+        private void OnItemEvent(ItemAddedOrRemovedToBackpackEvent eventData)
+        {
+            switch (eventData.Action)
+            {
+                case "added": 
+                    AddItem(eventData.ItemConfig);
+                    break;
+                case "removed":
+                    RemoveItem(eventData.ItemConfig);
+                    break;
+            }
+        }
+        private void AddItem(ItemConfig item)
         {
             if (item != null && !_inventoryItems.Contains(item))
             {
@@ -20,7 +43,7 @@ namespace Core
             }
         }
 
-        public void RemoveItem(ItemConfig item)
+        private void RemoveItem(ItemConfig item)
         {
             if (item != null && _inventoryItems.Contains(item))
             {
