@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public class EventManager
+    public static class EventManager
     {
         private static readonly Dictionary<Type, List<Delegate>> EventDictionary = new();
 
