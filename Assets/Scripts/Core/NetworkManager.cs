@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
+using Events;
 
 namespace Core
 {
@@ -9,7 +11,22 @@ namespace Core
         private const string BaseUrl = "https://wadahub.manerai.com/api/inventory/status";
         private const string Token = "kPERnYcWAY46xaSy8CEzanosAgsWM84Nx7SKM4QBSqPq6c7StWfGxzhxPfDh8MaP";
 
-        public async Task PostData(string data)
+        private void Start()
+        {
+            EventManager.Subscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
+        }
+
+        private void OnDestroy()
+        {
+            EventManager.Unsubscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
+        }
+        
+
+        private void OnItemEvent(ItemAddedOrRemovedToBackpackEvent eventData)
+        {
+            _ = PostData($"Item with ID:{eventData.Item.id}" + $" {eventData.Action}");
+        }
+        private async Task PostData(string data)
         {
             if (string.IsNullOrEmpty(data))
             {
