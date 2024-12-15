@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Configs;
-using Gameplay;
+using Core;
+using Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,16 +11,35 @@ namespace UI
     public class BackpackManagerUI : MonoBehaviour
     {
         [SerializeField] private List<ItemSlotUI> itemSlotsUI;
-        [SerializeField] private GameObject itemPrefab;
-        [SerializeField] private GridLayoutGroup gridLayoutGroup;
-
+        [SerializeField] private GameObject canvas;
+        
         private Dictionary<ItemType, ItemSlotUI> _backpackSlotsUI;
 
         private void Awake()
         {
+            CloseCanvas();
             Initialize();
         }
-
+        private void Start()
+        {
+            EventManager.Subscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
+        }
+        private void OnDestroy()
+        {
+            EventManager.Unsubscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
+        }
+        private void OnItemEvent(ItemAddedOrRemovedToBackpackEvent eventData)
+        {
+            switch (eventData.Action)
+            {
+                case "added": 
+                    AddItem(eventData.ItemConfig);
+                    break;
+                case "removed":
+                    RemoveItem(eventData.ItemConfig);
+                    break;
+            }
+        }
         private void Initialize()
         {
             _backpackSlotsUI = new Dictionary<ItemType, ItemSlotUI>();
@@ -29,34 +49,31 @@ namespace UI
                 _backpackSlotsUI[slotUI.itemType] = slotUI;
             }
         }
-
-        private void AddToBackpackUI(ItemUI item)
+        private void AddItem(ItemConfig item)
         {
-            SetItemInUISlot(item);
-
-            Debug.LogError($"No slot found for item type {item.itemConfig}");
-        }
-
-        private void RemoveFromBackpackUI(ItemUI item)
-        {
-            if (_backpackSlotsUI.TryGetValue(item.itemConfig.type, out var slotUI))
+            if (_backpackSlotsUI.TryGetValue(item.type, out var itemSlotUI))
             {
-                Debug.Log($"Item {item.name} removed to UI in slot {item.itemConfig.type}");
+                itemSlotUI.image.enabled = true;
             }
-
-            Debug.LogError($"No slot found for item type {item.itemConfig.type}");
+            else
+                Debug.LogWarning($"No slot found for item type: {item.type}");
         }
-        
-        private void SetItemInUISlot(ItemUI item)
+        private void RemoveItem(ItemConfig item)
         {
-            if (!_backpackSlotsUI.TryGetValue(item.itemConfig.type, out var slotUI))
+            if (_backpackSlotsUI.TryGetValue(item.type, out var itemSlotUI))
             {
-                Debug.LogWarning($"No slot found for item type: {item.itemConfig.type}");
-                return;
+                itemSlotUI.image.enabled = false;
             }
-            
-            item.transform.SetParent(slotUI.slotTransform);
-            AnimationHandler.SmoothSetToPositionAndScale(item.transform, slotUI.slotTransform, 0.3f);
+            else
+                Debug.LogWarning($"No slot found for item type: {item.type}");
+        }
+        private void OpenCanvas()
+        {
+            canvas.SetActive(true);
+        }
+        private void CloseCanvas()
+        {
+            canvas.SetActive(false);
         }
     }
 
@@ -64,6 +81,6 @@ namespace UI
     public class ItemSlotUI
     {
         public ItemType itemType;
-        public Transform slotTransform;
+        public Image image;
     }
 }
