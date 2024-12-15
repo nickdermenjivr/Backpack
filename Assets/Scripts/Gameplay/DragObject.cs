@@ -5,10 +5,12 @@ namespace Gameplay
     public class DragObject : MonoBehaviour
     {
         private Camera _mainCamera;
-        protected bool IsDragging;
+        private bool _isDragging;
         private Vector3 _offset;
         private Rigidbody _rb;
         private Plane _dragPlane;
+
+        protected bool CanDrag = true;
 
         private void Start()
         {
@@ -20,7 +22,10 @@ namespace Gameplay
 
         protected virtual void OnMouseDown()
         {
-            IsDragging = true;
+            if (!CanDrag)
+                return;
+            
+            _isDragging = true;
             _rb.isKinematic = true;
 
             _offset = transform.position - GetMouseWorldPosition();
@@ -28,7 +33,7 @@ namespace Gameplay
 
         protected virtual void OnMouseDrag()
         {
-            if (!IsDragging) return;
+            if (!_isDragging || !CanDrag) return;
 
             var newPosition = GetMouseWorldPosition() + _offset;
             transform.position = newPosition;
@@ -36,7 +41,7 @@ namespace Gameplay
 
         protected virtual void OnMouseUp()
         {
-            IsDragging = false;
+            _isDragging = false;
             _rb.isKinematic = false;
         }
 

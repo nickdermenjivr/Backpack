@@ -22,25 +22,10 @@ namespace Gameplay
         protected override void OnMouseUp()
         {
             var itemsInInventory = _inventoryManager.GetItems();
-            if (IsOverBackpack() && !itemsInInventory.Contains(_item.itemConfig))
-            {
-                _backpackManager.AddToBackpack(_item);
-                IsDragging = false;
-            }
-            else if (IsOverBackpack() && itemsInInventory.Contains(_item.itemConfig))
-            {
-                _backpackManager.SetItemInSlot(_item);
-                IsDragging = false;
-            }
-            else if (!IsOverBackpack() && itemsInInventory.Contains(_item.itemConfig))
-            {
-                _backpackManager.RemoveFromBackpack(_item);
-                base.OnMouseUp();
-            }
-            else
-            {
-                base.OnMouseUp();
-            }
+            
+            if (!IsOverBackpack() || itemsInInventory.Contains(_item.itemConfig)) return;
+            _backpackManager.AddToBackpack(_item);
+            CanDrag = false;
         }
 
         private bool IsOverBackpack()
