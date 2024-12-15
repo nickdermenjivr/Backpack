@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Configs;
+using Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,6 +56,7 @@ namespace UI
             }
             
             item.transform.SetParent(slotUI.slotTransform);
+            AnimationHandler.SmoothSetToPositionAndScale(item.transform, slotUI.slotTransform, 0.3f);
         }
     }
 
