@@ -30,8 +30,9 @@ namespace Gameplay
         public void AddToBackpack(Item item)
         {
             SetItemInSlot(item);
-            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{ItemConfig = item.itemConfig, Action = "added"});
-            
+            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent
+                { ItemConfig = item.itemConfig, Action = "added" });
+
             Debug.Log($"Item {item.itemConfig.name} added to backpack in slot {item.itemConfig.type}");
         }
 
@@ -43,24 +44,24 @@ namespace Gameplay
                 return;
             }
 
-            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent{ItemConfig = item.itemConfig, Action = "removed"});
-            
+            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent
+                { ItemConfig = item.itemConfig, Action = "removed" });
+
             Debug.Log($"Item {item.name} removed from backpack.");
         }
 
-        public void SetItemInSlot(Item item)
+        private void SetItemInSlot(Item item)
         {
             if (!_backpackSlots.TryGetValue(item.itemConfig.type, out var slotTransform))
             {
                 Debug.LogWarning($"No slot found for item type: {item.itemConfig.type}");
                 return;
             }
-            
-            item.transform.SetParent(slotTransform);
-            item.transform.localPosition = Vector3.zero;
+
+            AnimationHandler.SmoothSetToPositionAndScale(item.transform, slotTransform, 0.3f );
         }
     }
-    
+
     [Serializable]
     public class ItemSlot
     {
