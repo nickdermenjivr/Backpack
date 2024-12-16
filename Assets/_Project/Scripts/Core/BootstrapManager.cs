@@ -7,7 +7,6 @@ namespace _Project.Scripts.Core
     public class BootstrapScene : MonoBehaviour
     {
         public NetworkManager networkManager;
-        public InventoryManager inventoryManager;
         public string sceneToLoad;
 
         private void Start()
@@ -20,13 +19,12 @@ namespace _Project.Scripts.Core
 
         private bool InitializeManagers()
         {
-            if (!inventoryManager || !networkManager)
+            if (!networkManager)
             {
                 Debug.LogError("Managers aren't assigned!");
                 return false;
             }
             
-            DontDestroyOnLoad(inventoryManager.gameObject);
             DontDestroyOnLoad(networkManager.gameObject);
             return true;
         }

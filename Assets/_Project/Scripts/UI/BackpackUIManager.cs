@@ -65,7 +65,6 @@ namespace _Project.Scripts.UI
             {
                 slotImage.enabled = false;
                 Destroy(slotImage.GetComponent<ItemUI>());
-                Debug.LogError($"Delete ItemUI from: {item.name}");
             }
             else
                 Debug.LogWarning($"No slot found for item type: {item.type}");

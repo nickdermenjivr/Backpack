@@ -36,7 +36,7 @@ namespace _Project.Scripts.Gameplay
             if (!_isDragging || !CanDrag) return;
 
             var newPosition = GetMouseWorldPosition() + _offset;
-            transform.position = newPosition;
+            _rb.MovePosition(newPosition);
         }
 
         protected virtual void OnMouseUp()
