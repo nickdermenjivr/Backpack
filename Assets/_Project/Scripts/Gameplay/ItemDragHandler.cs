@@ -1,4 +1,6 @@
 using System.Linq;
+using _Project.Scripts.Core;
+using _Project.Scripts.Events;
 using UnityEngine;
 
 namespace _Project.Scripts.Gameplay
@@ -12,9 +14,26 @@ namespace _Project.Scripts.Gameplay
         {
             if (!TryGetComponent(out _item)) Debug.LogError($"'Item' isn't assigned to {name}");
             _backpackManager = FindObjectOfType<BackpackManager>();
-            if (_backpackManager == null) Debug.LogError($"'BackpackManager' isn't found in the scene.");
+            EventManager.Subscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
         }
-
+        private void OnDestroy()
+        {
+            EventManager.Unsubscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
+        }
+        private void OnItemEvent(ItemAddedOrRemovedToBackpackEvent eventData)
+        {
+            switch (eventData.Action)
+            {
+                case "removed":
+                    if (eventData.ItemConfig == _item.itemConfig) DetachItem();
+                    break;
+            }
+        }
+        private void DetachItem()
+        {
+            CanDrag = true;
+            base.OnMouseUp();
+        }
         protected override void OnMouseUp()
         {
             if (!CanDrag) return;
@@ -26,6 +45,7 @@ namespace _Project.Scripts.Gameplay
             else
                 base.OnMouseUp();
         }
+        
 
         private bool IsOverBackpack()
         {

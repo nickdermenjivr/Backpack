@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace _Project.Scripts.UI
@@ -6,19 +7,53 @@ namespace _Project.Scripts.UI
     {
         [SerializeField] private GameObject canvas;
 
-        private void Start()
+        private Vector3 _initialCanvasScale;
+
+        private void Awake()
         {
             canvas.SetActive(false);
+            _initialCanvasScale = canvas.transform.localScale;
         }
 
         private void OnMouseDown()
         {
-            canvas.SetActive(true);
+            UnShrinkAndActivate();
         }
 
         private void OnMouseUp()
         {
-            canvas.SetActive(false);
+            ShrinkAndDeactivate();
+        }
+        private void UnShrinkAndActivate()
+        {
+            var rectTransform = canvas.transform;
+    
+            rectTransform.localScale = Vector3.zero;
+    
+            canvas.SetActive(true);
+    
+            var growSequence = DOTween.Sequence();
+    
+            growSequence.Append(
+                rectTransform.DOScale(_initialCanvasScale, 0.3f)
+                    .SetEase(Ease.OutBack)
+            );
+        }
+        private void ShrinkAndDeactivate()
+        {
+            var rectTransform = canvas.transform;
+            var shrinkSequence = DOTween.Sequence();
+            
+            shrinkSequence.Append(
+                rectTransform.DOScale(Vector3.zero, 0.2f)
+                    .SetEase(Ease.InBack)
+            );
+
+            shrinkSequence.OnComplete(() => 
+            {
+                canvas.SetActive(false);
+                rectTransform.localScale = _initialCanvasScale;
+            });
         }
     }
 }

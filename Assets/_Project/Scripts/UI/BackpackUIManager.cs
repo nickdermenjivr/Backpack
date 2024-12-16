@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Core;
 using _Project.Scripts.Events;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,9 +11,8 @@ namespace _Project.Scripts.UI
 {
     public class BackpackManagerUI : MonoBehaviour
     {
-        [SerializeField] private List<ItemSlotUI> itemSlotsUI;
-        
-        private Dictionary<ItemType, ItemSlotUI> _backpackSlotsUI;
+        [SerializeField] private List<ItemUISlot> itemSlotsUI;
+        private Dictionary<ItemType, Image> _backpackSlotsUI;
     
         private void Awake()
         {
@@ -22,7 +22,6 @@ namespace _Project.Scripts.UI
         {
             EventManager.Subscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
         }
-
         private void OnDestroy()
         {
             EventManager.Unsubscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
@@ -34,44 +33,47 @@ namespace _Project.Scripts.UI
                 case "added": 
                     AddItem(eventData.ItemConfig);
                     break;
-                case "removed":
+                case "removed": 
                     RemoveItem(eventData.ItemConfig);
                     break;
             }
         }
         private void Initialize()
         {
-            _backpackSlotsUI = new Dictionary<ItemType, ItemSlotUI>();
+            _backpackSlotsUI = new Dictionary<ItemType, Image>();
 
-            foreach (var slotUI in itemSlotsUI)
+            foreach (var slot in itemSlotsUI)
             {
-                _backpackSlotsUI[slotUI.itemType] = slotUI;
+                _backpackSlotsUI[slot.itemType] = slot.image;
             }
         }
         private void AddItem(ItemConfig item)
         {
-            if (_backpackSlotsUI.TryGetValue(item.type, out var itemSlotUI))
+            if (_backpackSlotsUI.TryGetValue(item.type, out var slotImage))
             {
-                itemSlotUI.image.enabled = true;
+                slotImage.enabled = true;
+                
+                var itemUI = slotImage.AddComponent<ItemUI>();
+                itemUI.itemConfig = item;
             }
             else
                 Debug.LogWarning($"No slot found for item type: {item.type}");
         }
         private void RemoveItem(ItemConfig item)
         {
-            if (_backpackSlotsUI.TryGetValue(item.type, out var itemSlotUI))
+            if (_backpackSlotsUI.TryGetValue(item.type, out var slotImage))
             {
-                itemSlotUI.image.enabled = false;
-                EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent
-                    { ItemConfig = item, Action = "removed" });
+                slotImage.enabled = false;
+                Destroy(slotImage.GetComponent<ItemUI>());
+                Debug.LogError($"Delete ItemUI from: {item.name}");
             }
             else
                 Debug.LogWarning($"No slot found for item type: {item.type}");
         }
     }
-
+    
     [Serializable]
-    public class ItemSlotUI
+    public class ItemUISlot
     {
         public ItemType itemType;
         public Image image;

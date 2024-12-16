@@ -25,6 +25,11 @@ namespace _Project.Scripts.Gameplay
             current.DOScale(current.localScale * scaleFactor * 2f, duration);
         }
 
+        public static void SmoothScale(Transform current, Vector3 scale, float duration)
+        {
+            current.DOScale(scale, duration);
+        }
+
         public static void SmoothSetToPositionAndScale(Transform current, Transform target, float duration)
         {
             SmoothSetToPosition(current, target, duration);
