@@ -783,7 +783,7 @@ GameObject:
   - component: {fileID: 771764657}
   - component: {fileID: 771764656}
   m_Layer: 0
-  m_Name: Managers
+  m_Name: BackpackManagers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -808,7 +808,6 @@ MonoBehaviour:
     image: {fileID: 2098399171}
   - itemType: 2
     image: {fileID: 573216332}
-  canvas: {fileID: 838882247}
 --- !u!4 &771764657
 Transform:
   m_ObjectHideFlags: 0
@@ -2063,6 +2062,7 @@ GameObject:
   - component: {fileID: 1441668243}
   - component: {fileID: 1441668242}
   - component: {fileID: 1441668246}
+  - component: {fileID: 1441668247}
   m_Layer: 0
   m_Name: Backpack
   m_TagString: Backpack
@@ -2179,6 +2179,19 @@ MonoBehaviour:
     slotTransform: {fileID: 774188206}
   - itemType: 2
     slotTransform: {fileID: 2050035524}
+--- !u!114 &1441668247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441668240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101d31807bd3ef3419b733fa01569b5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 838882247}
 --- !u!1 &1631142966
 GameObject:
   m_ObjectHideFlags: 0

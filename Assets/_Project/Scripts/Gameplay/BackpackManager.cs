@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Configs;
-using Core;
-using Events;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Core;
+using _Project.Scripts.Events;
 using UnityEngine;
 
-namespace Gameplay
+namespace _Project.Scripts.Gameplay
 {
     public class BackpackManager : MonoBehaviour
     {

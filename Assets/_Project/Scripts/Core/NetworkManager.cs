@@ -1,10 +1,10 @@
 using System.Collections;
+using System.Threading.Tasks;
+using _Project.Scripts.Events;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Threading.Tasks;
-using Events;
 
-namespace Core
+namespace _Project.Scripts.Core
 {
     public class NetworkManager : MonoBehaviour
     {

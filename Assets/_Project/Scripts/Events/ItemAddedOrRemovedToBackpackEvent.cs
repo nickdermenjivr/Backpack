@@ -1,6 +1,6 @@
-using Core;
+using _Project.Scripts.Core;
 
-namespace Events
+namespace _Project.Scripts.Events
 {
     public class ItemAddedOrRemovedToBackpackEvent
     {

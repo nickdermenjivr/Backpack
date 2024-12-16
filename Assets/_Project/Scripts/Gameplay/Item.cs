@@ -1,7 +1,7 @@
-using Core;
+using _Project.Scripts.Core;
 using UnityEngine;
 
-namespace Gameplay
+namespace _Project.Scripts.Gameplay
 {
     public class Item : MonoBehaviour
     {

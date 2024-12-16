@@ -1,6 +1,6 @@
-using Configs;
+using _Project.Scripts.Configs;
 
-namespace Core
+namespace _Project.Scripts.Core
 {
     [System.Serializable]
     public class ItemConfig

@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Gameplay
+namespace _Project.Scripts.Gameplay
 {
     public static class AnimationHandler
     {

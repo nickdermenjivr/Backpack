@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Events;
+using _Project.Scripts.Events;
 using UnityEngine;
 
-namespace Core
+namespace _Project.Scripts.Core
 {
     public class InventoryManager : MonoBehaviour
     {

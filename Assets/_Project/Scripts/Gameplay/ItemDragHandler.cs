@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Gameplay
+namespace _Project.Scripts.Gameplay
 {
     public class ItemDragHandler : DragObject
     {

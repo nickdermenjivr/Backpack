@@ -1,29 +1,28 @@
 using System;
 using System.Collections.Generic;
-using Configs;
-using Core;
-using Events;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Core;
+using _Project.Scripts.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace _Project.Scripts.UI
 {
     public class BackpackManagerUI : MonoBehaviour
     {
         [SerializeField] private List<ItemSlotUI> itemSlotsUI;
-        [SerializeField] private GameObject canvas;
         
         private Dictionary<ItemType, ItemSlotUI> _backpackSlotsUI;
-
+    
         private void Awake()
         {
-            CloseCanvas();
             Initialize();
         }
         private void Start()
         {
             EventManager.Subscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
         }
+
         private void OnDestroy()
         {
             EventManager.Unsubscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
@@ -63,17 +62,11 @@ namespace UI
             if (_backpackSlotsUI.TryGetValue(item.type, out var itemSlotUI))
             {
                 itemSlotUI.image.enabled = false;
+                EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent
+                    { ItemConfig = item, Action = "removed" });
             }
             else
                 Debug.LogWarning($"No slot found for item type: {item.type}");
-        }
-        private void OpenCanvas()
-        {
-            canvas.SetActive(true);
-        }
-        private void CloseCanvas()
-        {
-            canvas.SetActive(false);
         }
     }
 

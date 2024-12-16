@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Core
+namespace _Project.Scripts.Core
 {
     public static class EventManager
     {
