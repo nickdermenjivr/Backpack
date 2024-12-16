@@ -36,20 +36,6 @@ namespace Gameplay
             Debug.Log($"Item {item.itemConfig.name} added to backpack in slot {item.itemConfig.type}");
         }
 
-        public void RemoveFromBackpack(Item item)
-        {
-            if (!_backpackSlots.ContainsKey(item.itemConfig.type))
-            {
-                Debug.LogError($"Slot for item type {item.itemConfig.type} not found!");
-                return;
-            }
-
-            EventManager.TriggerEvent(new ItemAddedOrRemovedToBackpackEvent
-                { ItemConfig = item.itemConfig, Action = "removed" });
-
-            Debug.Log($"Item {item.name} removed from backpack.");
-        }
-
         private void SetItemInSlot(Item item)
         {
             if (!_backpackSlots.TryGetValue(item.itemConfig.type, out var slotTransform))
