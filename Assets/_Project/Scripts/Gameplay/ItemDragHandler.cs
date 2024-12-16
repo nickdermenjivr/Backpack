@@ -7,6 +7,8 @@ namespace _Project.Scripts.Gameplay
 {
     public class ItemDragHandler : DragObject
     {
+        private Transform _resetItemPosition;
+        
         private Item _item;
         private BackpackManager _backpackManager;
 
@@ -14,6 +16,8 @@ namespace _Project.Scripts.Gameplay
         {
             if (!TryGetComponent(out _item)) Debug.LogError($"'Item' isn't assigned to {name}");
             _backpackManager = FindObjectOfType<BackpackManager>();
+            _resetItemPosition = GameObject.Find("ResetItemPosition").transform;
+            
             EventManager.Subscribe<ItemAddedOrRemovedToBackpackEvent>(OnItemEvent);
         }
         private void OnDestroy()
@@ -32,6 +36,7 @@ namespace _Project.Scripts.Gameplay
         private void DetachItem()
         {
             CanDrag = true;
+            _item.transform.position = _resetItemPosition.position;
             base.OnMouseUp();
         }
         protected override void OnMouseUp()
